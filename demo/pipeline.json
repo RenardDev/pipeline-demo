@@ -1,0 +1,538 @@
+{
+  "target_seconds": 300,
+  "nodes": [
+    {
+      "id": "plan",
+      "name": "🚦 01 · Plan & release context",
+      "stage": "Prepare",
+      "offset": 8,
+      "needs": [],
+      "tasks": [
+        "Resolve demo revision and release context",
+        "Map service dependencies and execution lanes",
+        "Publish the shared five-minute clock"
+      ],
+      "metric": "32 visible jobs · 3 services · 2 browsers"
+    },
+    {
+      "id": "lint",
+      "name": "🧹 02 · Lint & formatting",
+      "stage": "Validate",
+      "offset": 35,
+      "needs": [
+        "plan"
+      ],
+      "tasks": [
+        "Inspect TypeScript, Python and YAML fixtures",
+        "Simulate lint rules and formatting checks",
+        "Collect the code-style report"
+      ],
+      "metric": "218 files · 0 simulated violations"
+    },
+    {
+      "id": "types",
+      "name": "🔎 03 · Type contracts",
+      "stage": "Validate",
+      "offset": 42,
+      "needs": [
+        "plan"
+      ],
+      "tasks": [
+        "Load service contracts and shared schemas",
+        "Simulate strict type analysis",
+        "Check backwards-compatible API shapes"
+      ],
+      "metric": "64 contracts · 100% simulated compatibility"
+    },
+    {
+      "id": "secrets",
+      "name": "🔐 04 · Secret scan",
+      "stage": "Validate",
+      "offset": 32,
+      "needs": [
+        "plan"
+      ],
+      "tasks": [
+        "Enumerate the demonstration source tree",
+        "Simulate token and credential pattern checks",
+        "Write a sanitized scan manifest"
+      ],
+      "metric": "412 patterns · 0 simulated secrets"
+    },
+    {
+      "id": "dependencies",
+      "name": "📚 05 · Dependency audit",
+      "stage": "Validate",
+      "offset": 45,
+      "needs": [
+        "plan"
+      ],
+      "tasks": [
+        "Resolve the demonstration lockfile inventory",
+        "Simulate vulnerability and license matching",
+        "Collect dependency policy results"
+      ],
+      "metric": "146 packages · 0 simulated critical findings"
+    },
+    {
+      "id": "infra",
+      "name": "🏗️ 06 · Infrastructure plan",
+      "stage": "Validate",
+      "offset": 40,
+      "needs": [
+        "plan"
+      ],
+      "tasks": [
+        "Load the demonstration infrastructure topology",
+        "Simulate policy validation and resource diff",
+        "Publish the infrastructure plan"
+      ],
+      "metric": "12 resources · simulated plan only"
+    },
+    {
+      "id": "docs",
+      "name": "📖 07 · Documentation",
+      "stage": "Build",
+      "offset": 65,
+      "needs": [
+        "lint"
+      ],
+      "tasks": [
+        "Discover documentation and API examples",
+        "Simulate documentation rendering and link checks",
+        "Collect documentation previews"
+      ],
+      "metric": "38 pages · 124 simulated links checked"
+    },
+    {
+      "id": "build_web",
+      "name": "🎨 08 · Build web",
+      "stage": "Build",
+      "offset": 90,
+      "needs": [
+        "lint",
+        "types"
+      ],
+      "tasks": [
+        "Resolve web modules and static assets",
+        "Simulate chunk compilation and tree shaking",
+        "Write the web bundle manifest"
+      ],
+      "metric": "27 chunks · 184 KiB simulated gzip"
+    },
+    {
+      "id": "build_api",
+      "name": "⚙️ 09 · Build API",
+      "stage": "Build",
+      "offset": 95,
+      "needs": [
+        "types",
+        "dependencies"
+      ],
+      "tasks": [
+        "Resolve API handlers and generated contracts",
+        "Simulate service compilation and packaging",
+        "Write the API build manifest"
+      ],
+      "metric": "42 routes · 8 simulated build modules"
+    },
+    {
+      "id": "build_worker",
+      "name": "📨 10 · Build worker",
+      "stage": "Build",
+      "offset": 85,
+      "needs": [
+        "dependencies"
+      ],
+      "tasks": [
+        "Resolve queue consumers and event schemas",
+        "Simulate worker compilation and packaging",
+        "Write the worker build manifest"
+      ],
+      "metric": "6 consumers · 18 simulated event types"
+    },
+    {
+      "id": "sast",
+      "name": "🛡️ 11 · Static security",
+      "stage": "Build",
+      "offset": 92,
+      "needs": [
+        "secrets",
+        "dependencies"
+      ],
+      "tasks": [
+        "Load the simulated security rule packs",
+        "Simulate data-flow and injection analysis",
+        "Collect the static security report"
+      ],
+      "metric": "92 rules · 0 simulated high-severity issues"
+    },
+    {
+      "id": "unit_web",
+      "name": "🧩 12 · Web unit tests",
+      "stage": "Test",
+      "offset": 125,
+      "needs": [
+        "build_web"
+      ],
+      "tasks": [
+        "Discover component and state-management fixtures",
+        "Simulate component, hook and reducer tests",
+        "Collect coverage and test results"
+      ],
+      "metric": "186 simulated tests · 94.2% fixture coverage"
+    },
+    {
+      "id": "unit_api",
+      "name": "🧪 13 · API unit tests",
+      "stage": "Test",
+      "offset": 130,
+      "needs": [
+        "build_api"
+      ],
+      "tasks": [
+        "Prepare handler and repository fixtures",
+        "Simulate routing, validation and permission tests",
+        "Collect API test evidence"
+      ],
+      "metric": "248 simulated tests · 96.1% fixture coverage"
+    },
+    {
+      "id": "unit_worker",
+      "name": "🔁 14 · Worker unit tests",
+      "stage": "Test",
+      "offset": 120,
+      "needs": [
+        "build_worker"
+      ],
+      "tasks": [
+        "Prepare queue and retry fixtures",
+        "Simulate delivery, retry and idempotency tests",
+        "Collect worker test evidence"
+      ],
+      "metric": "92 simulated tests · 93.8% fixture coverage"
+    },
+    {
+      "id": "container",
+      "name": "📦 15 · Container assembly",
+      "stage": "Package",
+      "offset": 137,
+      "needs": [
+        "build_web",
+        "build_api",
+        "build_worker",
+        "secrets"
+      ],
+      "tasks": [
+        "Read the three simulated build manifests",
+        "Simulate OCI layers and image compression",
+        "Create demonstration image digests"
+      ],
+      "metric": "3 simulated OCI images · no registry push"
+    },
+    {
+      "id": "sbom",
+      "name": "🧾 16 · SBOM & provenance",
+      "stage": "Package",
+      "offset": 150,
+      "needs": [
+        "container"
+      ],
+      "tasks": [
+        "Enumerate simulated image components",
+        "Simulate SBOM and provenance generation",
+        "Collect the supply-chain manifest"
+      ],
+      "metric": "3 demonstration SBOMs · unsigned fixtures"
+    },
+    {
+      "id": "integration",
+      "name": "🔗 17 · Integration tests",
+      "stage": "Verify",
+      "offset": 158,
+      "needs": [
+        "unit_api",
+        "unit_worker",
+        "container"
+      ],
+      "tasks": [
+        "Prepare virtual database and queue fixtures",
+        "Simulate API, database and event round trips",
+        "Collect integration test traces"
+      ],
+      "metric": "56 simulated scenarios · 3 virtual services"
+    },
+    {
+      "id": "e2e_chromium",
+      "name": "🌐 18 · E2E Chromium",
+      "stage": "Verify",
+      "offset": 175,
+      "needs": [
+        "unit_web",
+        "container"
+      ],
+      "tasks": [
+        "Prepare the Chromium demonstration viewport",
+        "Simulate sign-in, search and checkout journeys",
+        "Collect browser trace fixtures"
+      ],
+      "metric": "24 simulated journeys · Chromium profile"
+    },
+    {
+      "id": "e2e_firefox",
+      "name": "🦊 19 · E2E Firefox",
+      "stage": "Verify",
+      "offset": 170,
+      "needs": [
+        "unit_web",
+        "container"
+      ],
+      "tasks": [
+        "Prepare the Firefox demonstration viewport",
+        "Simulate sign-in, search and checkout journeys",
+        "Collect browser trace fixtures"
+      ],
+      "metric": "24 simulated journeys · Firefox profile"
+    },
+    {
+      "id": "accessibility",
+      "name": "♿ 20 · Accessibility",
+      "stage": "Verify",
+      "offset": 160,
+      "needs": [
+        "build_web"
+      ],
+      "tasks": [
+        "Prepare page and keyboard-navigation fixtures",
+        "Simulate landmark, contrast and focus checks",
+        "Collect the accessibility fixture report"
+      ],
+      "metric": "12 demo pages · 0 simulated serious violations"
+    },
+    {
+      "id": "performance",
+      "name": "⚡ 21 · Load & performance",
+      "stage": "Verify",
+      "offset": 178,
+      "needs": [
+        "integration"
+      ],
+      "tasks": [
+        "Prepare the virtual load-test profile",
+        "Simulate ramp-up and steady-state request traffic",
+        "Collect the latency histogram fixture"
+      ],
+      "metric": "500 virtual users · 83 ms simulated p95"
+    },
+    {
+      "id": "security_gate",
+      "name": "🚨 22 · Security gate",
+      "stage": "Gates",
+      "offset": 170,
+      "needs": [
+        "sast",
+        "sbom",
+        "infra"
+      ],
+      "tasks": [
+        "Read simulated code, supply-chain and infra reports",
+        "Evaluate demonstration security policy thresholds",
+        "Publish the simulated security gate result"
+      ],
+      "metric": "3 security lanes · demonstration policy passed"
+    },
+    {
+      "id": "quality_gate",
+      "name": "✅ 23 · Quality gate",
+      "stage": "Gates",
+      "offset": 190,
+      "needs": [
+        "unit_web",
+        "unit_api",
+        "unit_worker",
+        "integration",
+        "e2e_chromium",
+        "e2e_firefox",
+        "accessibility",
+        "performance",
+        "security_gate"
+      ],
+      "tasks": [
+        "Gather all required demonstration test lanes",
+        "Evaluate simulated coverage and release thresholds",
+        "Publish the simulated release decision"
+      ],
+      "metric": "9 required inputs · demonstration gate passed"
+    },
+    {
+      "id": "preview",
+      "name": "🏕️ 24 · Preview environment",
+      "stage": "Deliver",
+      "offset": 205,
+      "needs": [
+        "quality_gate"
+      ],
+      "tasks": [
+        "Prepare an isolated virtual preview namespace",
+        "Simulate three-service rollout and health probes",
+        "Publish the simulated preview endpoint manifest"
+      ],
+      "metric": "3 virtual replicas · no environment created"
+    },
+    {
+      "id": "smoke",
+      "name": "💨 25 · Preview smoke tests",
+      "stage": "Deliver",
+      "offset": 220,
+      "needs": [
+        "preview"
+      ],
+      "tasks": [
+        "Load the virtual preview endpoint manifest",
+        "Simulate readiness, API and UI smoke requests",
+        "Collect the preview smoke fixture results"
+      ],
+      "metric": "15 simulated probes · virtual endpoints healthy"
+    },
+    {
+      "id": "canary",
+      "name": "🐤 26 · Canary rollout 10%",
+      "stage": "Release",
+      "offset": 237,
+      "needs": [
+        "smoke"
+      ],
+      "tasks": [
+        "Prepare the virtual canary traffic policy",
+        "Simulate a ten-percent traffic shift",
+        "Collect the canary rollout evidence"
+      ],
+      "metric": "10% simulated traffic · no deployment performed"
+    },
+    {
+      "id": "observe",
+      "name": "📡 27 · Observe canary",
+      "stage": "Release",
+      "offset": 252,
+      "needs": [
+        "canary"
+      ],
+      "tasks": [
+        "Prepare simulated metrics and trace windows",
+        "Simulate error-rate and latency observation",
+        "Collect the virtual SLO evaluation"
+      ],
+      "metric": "99.98% simulated availability · 0.02% fixture errors"
+    },
+    {
+      "id": "promote",
+      "name": "🚀 28 · Promote to 100%",
+      "stage": "Release",
+      "offset": 267,
+      "needs": [
+        "observe"
+      ],
+      "tasks": [
+        "Read the virtual canary observation result",
+        "Simulate a full traffic promotion",
+        "Collect the simulated release marker"
+      ],
+      "metric": "100% simulated traffic · no production access"
+    },
+    {
+      "id": "release_notes",
+      "name": "📝 29 · Release notes",
+      "stage": "Deliver",
+      "offset": 270,
+      "needs": [
+        "quality_gate",
+        "docs"
+      ],
+      "tasks": [
+        "Read the demonstration change and docs manifests",
+        "Simulate changelog and release-note assembly",
+        "Collect the unpublished release-note fixture"
+      ],
+      "metric": "3 service notes · no GitHub release created"
+    },
+    {
+      "id": "rollback",
+      "name": "🛟 30 · Rollback drill",
+      "stage": "Recover",
+      "offset": 277,
+      "needs": [
+        "canary"
+      ],
+      "optional": true,
+      "tasks": [
+        "Detect the intentionally failed canary fixture",
+        "Simulate restoring the previous traffic weights",
+        "Collect recovery evidence and virtual health probes"
+      ],
+      "metric": "0% simulated canary traffic · rollback drill complete"
+    },
+    {
+      "id": "cleanup",
+      "name": "🧽 31 · Cleanup & audit",
+      "stage": "Finish",
+      "offset": 282,
+      "needs": [
+        "plan",
+        "preview",
+        "promote",
+        "rollback"
+      ],
+      "tasks": [
+        "Inventory virtual preview and release resources",
+        "Simulate teardown and audit-trail collection",
+        "Confirm the demo left no deployed resources"
+      ],
+      "metric": "0 actual resources created · demo audit complete"
+    },
+    {
+      "id": "report",
+      "name": "🏁 32 · Mission control report",
+      "stage": "Finish",
+      "offset": 300,
+      "needs": [
+        "plan",
+        "lint",
+        "types",
+        "secrets",
+        "dependencies",
+        "infra",
+        "docs",
+        "build_web",
+        "build_api",
+        "build_worker",
+        "sast",
+        "unit_web",
+        "unit_api",
+        "unit_worker",
+        "container",
+        "sbom",
+        "integration",
+        "e2e_chromium",
+        "e2e_firefox",
+        "accessibility",
+        "performance",
+        "security_gate",
+        "quality_gate",
+        "preview",
+        "smoke",
+        "canary",
+        "observe",
+        "promote",
+        "release_notes",
+        "rollback",
+        "cleanup"
+      ],
+      "tasks": [
+        "Download all available process reports",
+        "Build the graph, timeline and status overview",
+        "Publish the final demonstration evidence"
+      ],
+      "metric": "JSON + Markdown + HTML · actual timings, simulated workloads"
+    }
+  ]
+}

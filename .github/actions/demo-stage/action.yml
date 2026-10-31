@@ -1,0 +1,45 @@
+name: Demonstration process
+description: Three visible phases with live logs, a job summary and a per-process artifact.
+inputs:
+  node:
+    description: Node ID from demo/pipeline.json
+    required: true
+  started-at:
+    description: Shared workflow start time in epoch seconds
+    required: true
+outputs:
+  started_at:
+    description: Shared clock propagated to downstream jobs
+    value: ${{ steps.prepare.outputs.started_at }}
+runs:
+  using: composite
+  steps:
+    - name: '01 · Prepare inputs'
+      id: prepare
+      shell: bash
+      env:
+        DEMO_NODE: ${{ inputs.node }}
+        DEMO_STARTED_AT: ${{ inputs.started-at }}
+      run: python3 scripts/demo_pipeline.py stage --node "$DEMO_NODE" --part prepare
+    - name: '02 · Run process with live progress'
+      shell: bash
+      env:
+        DEMO_NODE: ${{ inputs.node }}
+        DEMO_STARTED_AT: ${{ inputs.started-at }}
+      run: python3 scripts/demo_pipeline.py stage --node "$DEMO_NODE" --part work
+    - name: '03 · Collect evidence & job summary'
+      if: ${{ !cancelled() }}
+      shell: bash
+      env:
+        DEMO_NODE: ${{ inputs.node }}
+        DEMO_STARTED_AT: ${{ inputs.started-at }}
+      run: python3 scripts/demo_pipeline.py stage --node "$DEMO_NODE" --part finish
+    - name: '04 · Upload process report'
+      if: ${{ !cancelled() }}
+      uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+      with:
+        name: process-${{ inputs.node }}-${{ github.run_attempt }}
+        path: reports/${{ inputs.node }}.json
+        if-no-files-found: error
+        retention-days: 7
+        compression-level: 0
